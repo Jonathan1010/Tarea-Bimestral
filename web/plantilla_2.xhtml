@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="/css/default.css"/>
+        <h:outputStylesheet name="/css/cssLayout.css"/>
+        <title>Facelets Template</title>
+    </h:head>
+
+    <h:body>
+
+        <div id="top">
+            <ui:insert name="top"> <h1><center><b> JOYERIAS </b></center></h1>
+                <br>
+                    <li> <a href = "planilla1.xhtml"> INICIO </a></li><br></br>
+                    <li> <a href = "planilla2.xhtml"> OFERTAS</a></li><br></br>
+                    <li> <a href = " "> CONTACTANOS </a></li><br></br>
+                    <li> <a href = " "> SEGUROS </a></li><br></br>
+                    <li> <a href = "planilla3.xhtml"> MAS SOBRE NOSOTROS </a></li>
+                    <br></br>
+                </br></ui:insert>
+        </div>
+        <div>
+            <div id="left">
+                <ui:insert name="left"><h3 style="margin-top:0">Manual</h3>
+                    <p:commandButton type="button" onclick="PF('switcher').previous();"
+                                     icon="pi pi-caret-left" id="prev" style="margin-bottom: 5px"/>
+                    <p:commandButton type="button" onclick="PF('switcher').next();"
+                                     icon="pi pi-caret-right" id="next" style="margin-bottom: 5px"/>
+
+                    <p:imageSwitch effect="wipe" widgetVar="switcher" id="manuelSwitcher"
+                                   slideshowAuto="false">
+                        <ui:repeat value="#{imagesView.images}" var="image" id="manuelSwitcherImages">
+                            <p:graphicImage name="/demo/images/nature/#{image}" id="image"/>
+                        </ui:repeat>
+                    </p:imageSwitch>
+
+                    <h3>Fade</h3>
+                    <p:imageSwitch effect="fade" id="fadeEffect">
+                        <ui:repeat value="#{imagesView.images}" var="image" id="fadeEffectImages">
+                            <p:graphicImage name="/demo/images/nature/#{image}" id="image" />
+                        </ui:repeat>
+                    </p:imageSwitch>
+
+                    <h3>Zoom</h3>
+                    <p:imageSwitch effect="zoom">
+                        <ui:repeat value="#{imagesView.images}" var="image">
+                            <p:graphicImage name="/demo/images/nature/#{image}" />
+                        </ui:repeat>
+                    </p:imageSwitch>
+
+                    <h3>TurnDown</h3>
+                    <p:imageSwitch effect="turnDown">
+                        <ui:repeat value="#{imagesView.images}" var="image">
+                            <p:graphicImage name="/demo/images/nature/#{image}" />
+                        </ui:repeat>
+                    </p:imageSwitch>
+
+                    <h3>Shuffle</h3>
+                    <p:imageSwitch effect="shuffle">
+                        <ui:repeat value="#{imagesView.images}" var="image">
+                            <p:graphicImage name="/demo/images/nature/#{image}" />
+                        </ui:repeat>
+                    </p:imageSwitch>
+
+                    <h3>Dialog Integration</h3>
+                    <p:commandButton type="button" value="Show" onclick="PF('dlg').show()" icon="pi pi-home"/>
+
+                    <p:dialog header="Images" widgetVar="dlg" modal="true"
+                              draggable="false" resizable="false">
+
+                        <p:imageSwitch effect="fade">
+                            <ui:repeat value="#{imagesView.images}" var="image">
+                                <p:graphicImage name="/demo/images/nature/#{image}" />
+                            </ui:repeat>
+                        </p:imageSwitch>
+                    </p:dialog></ui:insert>
+            </div>
+            <div>
+                <div id="right">
+                    <ui:insert name="right"><style type="text/css">           
+                            .top {
+                                filter:alpha(opacity=80);
+                                opacity:0.8;
+                                padding:50px 0 0 50px;
+                                z-index: 1000;
+                            }
+                        </style>
+                        <p:notificationBar position="top" effect="slide" styleClass="top" widgetVar="bar">
+                            <h:outputText value="PrimeFaces Rocks!" style="font-size:36px;" />
+                        </p:notificationBar>
+
+                        <p:commandButton value="Mas Productos" onclick="PF('bar').show()" type="button" icon="pi pi-arrow-down" />
+                        <br>
+                        </br>
+                        <p:commandButton value="Ver Mas Tarde" onclick="PF('bar').hide()" type="button" icon="pi pi-arrow-up"/></ui:insert>
+                </div>
+                <div id="content" class="right_content">
+                    <ui:insert name="content"><h:form id="form">
+                            <p:growl id="msgs" />
+
+                            <p:panel header="Crear Nueva Marca" style="margin-bottom:20px">
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <h:outputLabel value="Joya : *" for="txt_title"></h:outputLabel>
+                                    <p:inputText id="txt_title" value="#{collectorView.book.title}" required="true"/>
+
+                                    <h:outputLabel value="Autor : *" for="txt_author"></h:outputLabel>
+                                    <p:inputText id="txt_author" value="#{collectorView.book.author}" required="true"/>
+
+                                    <p:commandButton id="btn_reset" value="Reset" type="reset"/>
+                                    <p:commandButton id="btn_add" value="Add" update="books msgs @parent" action="#{collectorView.reinit}" >
+                                        <p:collector value="#{collectorView.book}" addTo="#{collectorView.books}" unique="true"/>
+                                    </p:commandButton>
+                                </h:panelGrid>
+                            </p:panel>
+
+                            <p:outputPanel id="books">
+                                <p:dataTable value="#{collectorView.books}" var="book" id="booksTable">
+
+                                    <p:column headerText="Nombre">
+                                        <h:outputText value="#{book.title}" />
+                                    </p:column>
+
+                                    <p:column headerText="Autor">
+                                        <f:facet name="header">
+                                            <h:outputText value="Author" />
+                                        </f:facet>
+                                        <h:outputText value="#{book.author}" />
+                                    </p:column>
+
+                                    <p:column headerText="Descripcion">
+                                        <p:commandLink value="Remove" update=":form:books" process=":form:books">
+                                            <p:collector value="#{book}" removeFrom="#{collectorView.books}" unique="true"/>
+                                        </p:commandLink>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:outputPanel>
+                        </h:form></ui:insert>
+                </div>
+            </div>
+        </div>        
+    </h:body>
+
+</html>
